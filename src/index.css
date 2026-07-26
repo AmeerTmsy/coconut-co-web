@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  /* Coconut brand palette */
+  --color-cream: #FAF6F0;
+  --color-coconut-50: #FBF8F3;
+  --color-coconut-100: #F3E9DA;
+  --color-coconut-200: #E5D2B8;
+  --color-coconut-300: #D4B68C;
+  --color-coconut-400: #C19A63;
+  --color-coconut-500: #A87D45;
+  --color-coconut-600: #8A6336;
+  --color-coconut-700: #6B4C2A;
+  --color-coconut-800: #4A341D;
+  --color-coconut-900: #2E2010;
+
+  --color-leaf-50: #F1F7EE;
+  --color-leaf-100: #DCEBD3;
+  --color-leaf-200: #B9D7A8;
+  --color-leaf-300: #91BD78;
+  --color-leaf-400: #6FA552;
+  --color-leaf-500: #54863A;
+  --color-leaf-600: #426B2D;
+  --color-leaf-700: #335322;
+  --color-leaf-800: #243B18;
+  --color-leaf-900: #16240E;
+
+  --font-display: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-coconut-900);
+}
