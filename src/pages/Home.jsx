@@ -7,6 +7,7 @@ import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import api from '../services/api'
+import SEO from '../components/SEO'
 
 // ── Hero Section ──────────────────────────────────────────────────────────────
 function Hero() {
@@ -466,6 +467,12 @@ function Newsletter() {
 function Home() {
   return (
     <div>
+      <SEO
+        title="Pure Coconut Products from Kerala"
+        description="Shop virgin coconut oil, protein bars, coconut sugar, snacks and more. Farm-fresh, no additives, free shipping above ₹999."
+        url="/"
+      />
+      <Hero />
       <Hero />
       <CategoriesStrip />
       <FeaturedProducts />

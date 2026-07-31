@@ -7,6 +7,8 @@ import { Toaster } from 'react-hot-toast'
 import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { HelmetProvider } from 'react-helmet-async'
+import { WishlistProvider } from './context/WishlistContext.jsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,15 +21,19 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <App />
-            <Toaster position="top-center" />
-          </CartProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <AuthProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <App />
+                <Toaster position="top-center" />
+              </CartProvider>
+            </WishlistProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </HelmetProvider>
   </StrictMode>,
 )

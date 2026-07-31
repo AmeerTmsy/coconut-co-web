@@ -3,11 +3,15 @@ import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchProductBySlug } from '../services/productService'
 import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 import ProductCard from '../components/ProductCard'
+import SEO from '../components/SEO'
+import ProductReviews from '../components/ProductReviews'
 
 function ProductDetail() {
   const { slug } = useParams()
   const { addItem } = useCart()
+  const { toggle, isWishlisted } = useWishlist()
   const [selectedVariantIdx, setSelectedVariantIdx] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState('description')
@@ -31,6 +35,11 @@ function ProductDetail() {
   }
 
   const { product, relatedProducts } = data
+  const wishlisted = isWishlisted(product._id)
+  const seoTitle = product.seoTitle || product.name
+  const seoDescription = product.seoDescription || product.shortDescription
+  const seoImage = product.images?.[0]
+
   const variant = product.variants[selectedVariantIdx]
   const hasDiscount = variant.mrp > variant.price
   const discountPct = hasDiscount ? Math.round(((variant.mrp - variant.price) / variant.mrp) * 100) : 0
@@ -44,7 +53,14 @@ function ProductDetail() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div key={slug} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <SEO
+        title={seoTitle}
+        description={seoDescription}
+        image={seoImage}
+        url={`/product/${product.slug}`}
+        type="product"
+      />
       <div className="grid md:grid-cols-2 gap-10">
         {/* Image gallery */}
         <div className="aspect-square rounded-2xl overflow-hidden bg-coconut-50">
@@ -76,11 +92,10 @@ function ProductDetail() {
                   <button
                     key={v._id}
                     onClick={() => setSelectedVariantIdx(idx)}
-                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
-                      idx === selectedVariantIdx
-                        ? 'bg-coconut-800 text-white border-coconut-800'
-                        : 'border-coconut-300 text-coconut-700 hover:border-coconut-500'
-                    }`}
+                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${idx === selectedVariantIdx
+                      ? 'bg-coconut-800 text-white border-coconut-800'
+                      : 'border-coconut-300 text-coconut-700 hover:border-coconut-500'
+                      }`}
                   >
                     {v.label}
                   </button>
@@ -119,6 +134,25 @@ function ProductDetail() {
             >
               {outOfStock ? 'Out of Stock' : 'Add to Cart'}
             </button>
+
+            {/* Wishlist button */}
+            <button
+              onClick={() => toggle(product._id, product.name)}
+              className={`w-12 h-12 rounded-full border flex items-center justify-center transition-colors ${wishlisted
+                  ? 'bg-red-500 text-white border-red-500'
+                  : 'border-coconut-300 text-coconut-400 hover:text-red-500 hover:border-red-300'
+                }`}
+              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                fill={wishlisted ? 'currentColor' : 'none'}
+                stroke="currentColor" strokeWidth={2} className="w-5 h-5"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                />
+              </svg>
+            </button>
           </div>
 
           {/* Tabs */}
@@ -128,11 +162,10 @@ function ProductDetail() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`pb-3 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? 'text-coconut-900 border-b-2 border-coconut-800'
-                      : 'text-coconut-500 hover:text-coconut-700'
-                  }`}
+                  className={`pb-3 text-sm font-medium transition-colors ${activeTab === tab.id
+                    ? 'text-coconut-900 border-b-2 border-coconut-800'
+                    : 'text-coconut-500 hover:text-coconut-700'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -155,6 +188,15 @@ function ProductDetail() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Reviews */}
+      <div className="mt-16 border-t border-coconut-100 pt-10">
+        <ProductReviews
+          productId={product._id}
+          avgRating={product.ratingAvg}
+          ratingCount={product.ratingCount}
+        />
       </div>
 
       {/* Related products */}

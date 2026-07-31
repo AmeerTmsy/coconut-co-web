@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom'
+import SEO from '../components/SEO'
 
 function About() {
   return (
     <div>
+      <SEO
+        title="About Us"
+        description="Coconut Co. sources pure coconut products directly from Kerala's farms. Learn about our story, values, and commitment to natural ingredients."
+        url="/about"
+      />
       {/* Hero */}
       <section className="bg-coconut-900 py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

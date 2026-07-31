@@ -20,6 +20,14 @@ import AdminCategories from './pages/admin/Categories'
 import AdminCustomers from './pages/admin/Customers'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import FAQ from './pages/FAQ'
+import Terms from './pages/Terms'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import RefundPolicy from './pages/RefundPolicy'
+import ShippingPolicy from './pages/ShippingPolicy'
+import BulkEnquiry from './pages/BulkEnquiry'
+import DistributorEnquiry from './pages/DistributorEnquiry'
+import PartnerEnquiry from './pages/PartnerEnquiry'
 
 
 function App() {
@@ -29,11 +37,22 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+
+        <Route path="/bulk-enquiry" element={<BulkEnquiry />} />
+        <Route path="/distributor-enquiry" element={<DistributorEnquiry />} />
+        <Route path="/partner-enquiry" element={<PartnerEnquiry />} />
+
         <Route path="/product/:slug" element={<ProductDetail key={location.pathname} />} />
-        <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<GuestOnly><Login /></GuestOnly>} />
         <Route path="/register" element={<GuestOnly><Register /></GuestOnly>} />
         <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />

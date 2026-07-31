@@ -6,18 +6,21 @@ import { useAuth } from '../context/AuthContext'
 import { fetchAddresses, addAddress, updateAddress, deleteAddress } from '../services/userService'
 import { fetchMyOrders, cancelOrder } from '../services/orderService'
 import AddressForm from '../components/AddressForm'
+import { useWishlist } from '../context/WishlistContext'
+import { fetchWishlist } from '../services/wishlistService'
+import ProductCard from '../components/ProductCard'
 
 // ─── Order status badge colours ───────────────────────────────────────────────
 const statusStyles = {
-  Placed:             'bg-blue-100 text-blue-700',
-  Confirmed:          'bg-indigo-100 text-indigo-700',
-  Packed:             'bg-yellow-100 text-yellow-700',
-  Shipped:            'bg-orange-100 text-orange-700',
+  Placed: 'bg-blue-100 text-blue-700',
+  Confirmed: 'bg-indigo-100 text-indigo-700',
+  Packed: 'bg-yellow-100 text-yellow-700',
+  Shipped: 'bg-orange-100 text-orange-700',
   'Out for Delivery': 'bg-amber-100 text-amber-700',
-  Delivered:          'bg-leaf-100 text-leaf-700',
-  Cancelled:          'bg-red-100 text-red-600',
+  Delivered: 'bg-leaf-100 text-leaf-700',
+  Cancelled: 'bg-red-100 text-red-600',
   'Return Requested': 'bg-purple-100 text-purple-700',
-  Refunded:           'bg-gray-100 text-gray-600',
+  Refunded: 'bg-gray-100 text-gray-600',
 }
 
 // ─── Orders tab ───────────────────────────────────────────────────────────────
@@ -120,6 +123,43 @@ function OrdersTab() {
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+// ─── Wishlist ────────────────────────────────────────────────────────────
+
+function WishlistTab() {
+  const { data: wishlist = [], isLoading } = useQuery({
+    queryKey: ['wishlist'],
+    queryFn: fetchWishlist,
+  })
+
+  if (isLoading) return <p className="text-coconut-500">Loading wishlist...</p>
+
+  if (wishlist.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-4xl mb-4">🤍</p>
+        <p className="text-coconut-500 mb-4">Your wishlist is empty.</p>
+        <Link
+          to="/shop"
+          className="inline-block bg-coconut-800 text-white font-medium px-6 py-2.5 rounded-full hover:bg-coconut-900 transition-colors"
+        >
+          Browse Products
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <p className="text-coconut-500 text-sm mb-5">{wishlist.length} saved product{wishlist.length !== 1 ? 's' : ''}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+        {wishlist.map((product) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -240,6 +280,7 @@ function Account() {
 
   const tabs = [
     { id: 'orders', label: 'My Orders' },
+    { id: 'wishlist', label: 'Wishlist' },
     { id: 'addresses', label: 'Addresses' },
   ]
 
@@ -264,11 +305,10 @@ function Account() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-3 text-sm font-medium transition-colors ${
-              activeTab === tab.id
+            className={`px-5 py-3 text-sm font-medium transition-colors ${activeTab === tab.id
                 ? 'text-coconut-900 border-b-2 border-coconut-800'
                 : 'text-coconut-500 hover:text-coconut-700'
-            }`}
+              }`}
           >
             {tab.label}
           </button>
@@ -276,6 +316,7 @@ function Account() {
       </div>
 
       {activeTab === 'orders' && <OrdersTab />}
+      {activeTab === 'wishlist' && <WishlistTab />}
       {activeTab === 'addresses' && <AddressesTab />}
     </div>
   )

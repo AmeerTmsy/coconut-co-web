@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
+import WhatsAppButton from '../components/WhatsAppButton'
 
 function MainLayout() {
   const { totalItems } = useCart()
@@ -90,6 +91,8 @@ function MainLayout() {
                   { label: 'Contact', href: '/contact' },
                   { label: 'FAQ', href: '/faq' },
                   { label: 'Bulk Orders', href: '/bulk-enquiry' },
+                  { label: 'Become a Distributor', href: '/distributor-enquiry' },
+                  { label: 'Partner With Us', href: '/partner-enquiry' },
                 ].map((l) => (
                   <Link key={l.label} to={l.href} className="block text-sm text-coconut-400 hover:text-coconut-100 transition-colors">
                     {l.label}
@@ -126,6 +129,7 @@ function MainLayout() {
           </div>
         </div>
       </footer>
+      <WhatsAppButton />
     </div>
   )
 }
