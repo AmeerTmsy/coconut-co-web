@@ -21,6 +21,7 @@ const TAGS = [
 
 // ── Filters panel — defined OUTSIDE Shop so it never gets redefined on re-render
 function FiltersPanel({ categories, selectedCategory, selectedTags, searchQuery, minPrice, maxPrice, updateParam, clearAllFilters, hasActiveFilters }) {
+  console.log('API URL:', import.meta.env.VITE_API_URL || '/api') // Log the API URL for debugging
   return (
     <div className="space-y-6">
       {/* Search */}
