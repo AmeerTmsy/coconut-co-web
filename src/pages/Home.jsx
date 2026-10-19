@@ -146,7 +146,7 @@ function CategoriesStrip() {
 
 // ── Featured Products ─────────────────────────────────────────────────────────
 function FeaturedProducts() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['featured-products'],
     queryFn: () => fetchProducts({ limit: 4, page: 1 }),
   })
@@ -165,6 +165,12 @@ function FeaturedProducts() {
           View all →
         </Link>
       </div>
+      {isError && (
+        <div role="alert" className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6">
+          Products are temporarily unavailable. Please try again.
+          <button onClick={() => refetch()} className="ml-3 underline">Retry</button>
+        </div>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)

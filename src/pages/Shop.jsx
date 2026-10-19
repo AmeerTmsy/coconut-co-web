@@ -21,7 +21,7 @@ const TAGS = [
 
 // ── Filters panel — defined OUTSIDE Shop so it never gets redefined on re-render
 function FiltersPanel({ categories, selectedCategory, selectedTags, searchQuery, minPrice, maxPrice, updateParam, clearAllFilters, hasActiveFilters }) {
-  console.log('API URL:', import.meta.env.VITE_APP_URL || '/api') // Log the API URL for debugging
+  console.log('API URL:', import.meta.env.VITE_API_URL || '/api') // Log the API URL for debugging
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -165,7 +165,7 @@ function Shop() {
     queryFn: fetchCategories,
   })
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['products', selectedCategory, selectedTags, selectedSort, searchQuery, minPrice, maxPrice, page],
     queryFn: () => fetchProducts({
       category: selectedCategory || undefined,
@@ -273,7 +273,8 @@ function Shop() {
         <div className="flex-1 min-w-0">
           {isError && (
             <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 mb-6">
-              Something went wrong loading products.
+              Products are temporarily unavailable. Please try again.
+              <button onClick={() => refetch()} className="ml-3 underline">Retry</button>
             </div>
           )}
 
